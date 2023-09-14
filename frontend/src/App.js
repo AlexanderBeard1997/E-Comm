@@ -1,23 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
 
-function App() {
+import React, { useState } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import NavBar from '../components/NavBar';
+import GameList from '../components/GameList';
+import Cart from '../components/Cart';
+import Checkout from '../components/Checkout';
+
+// combine all components and handle state management for the cart
+
+const App = () => {
+  const [cartItems, setCartItems] = useState([]);
+
+  const addToCart = (game) => {
+    setCartItems(prevItems => [...prevItems, game]);
+  };
+
+  const removeFromCart = (gameToRemove) => {
+    setCartItems(prevItems => prevItems.filter(game => game.id !== gameToRemove._id));
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+    <BrowserRouter>
+      <NavBar />
+      <Route exact path="/" render={() => <GameList addToCart={addToCart} />} />
+      <Route path="/cart" render={() => <Cart cartItems={cartItems} removeFromCart={removeFromCart} />} />
+      <Route path="/checkout" component={Checkout} />
+    </BrowserRouter>
     </div>
   );
 }
