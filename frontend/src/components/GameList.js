@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import "./App.css";
 import { faker } from "@faker-js/faker";
 
 function App() {
   const [gameInfo, setGameInfo] = useState([]);
+  const [cart, setCart] = useState([]); // To store items in the cart
 
   useEffect(() => {
     fetchGameData();
@@ -37,6 +37,11 @@ function App() {
     }
   };
 
+  const addToCart = (game) => {
+     console.log("Adding to cart:", game); // Debugging statement
+    setCart([...cart, game]);
+  };
+
   // Function to format a number as a price with £ symbol
   const formatPrice = (price) => {
     return `£${price.toFixed(2)}`;
@@ -51,8 +56,19 @@ function App() {
           <h1>Title: {game.title}</h1>
           <p>Price: {game.price}</p>
           <img src={game.thumbnail} alt={`Game ${index + 1}`} />
+          <br></br>
+          <button onClick={() => addToCart(game)}>Add To Cart</button>
         </div>
       ))}
+
+<h2>Shopping Cart</h2>
+      <ul>
+        {cart.map((item, index) => (
+          <li key={index}>
+            {item.title} - {item.price}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
